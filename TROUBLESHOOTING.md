@@ -30,8 +30,9 @@ USER chatuser
 
 **Permisos de archivos en el host:**
 ```bash
-chmod 644 Secure_Canal/certs/chat_service/server.crt
-chmod 644 Secure_Canal/certs/chat_service/server.key
+chmod 644 Secure_Channel/certs/chat_service/server.crt
+chmod 644 Secure_Channel/certs/chat_service/server.key
+```
 ```
 
 ---
@@ -164,7 +165,7 @@ docker exec <container_name> python -c "import socket; s = socket.socket(socket.
 
 ### Verificar permisos de certificados:
 ```bash
-ls -la Secure_Canal/certs/*/
+ls -la Secure_Channel/certs/*/
 ```
 
 ### Verificar que nginx escucha en IPv6:
@@ -207,7 +208,7 @@ docker-compose up -d <service_name>
 
 Ejecutar el script de verificación completo:
 ```bash
-./Secure_Canal/verify.sh
+./Secure_Channel/verify.sh
 ```
 
 Este script verifica:

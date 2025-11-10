@@ -5,7 +5,7 @@ Este componente gestiona los certificados SSL/TLS para la comunicación segura e
 ## 📁 Estructura del Directorio
 
 ```
-Secure_Canal/
+Secure_Channel/
 ├── ca/                      # Autoridad Certificadora (CA)
 │   ├── ca.crt              # Certificado de la CA (público)
 │   ├── ca.key              # Llave privada de la CA (privado)
@@ -49,8 +49,8 @@ Cada servicio que usa SSL debe montar los certificados en sus volúmenes:
 services:
   chat_service:
     volumes:
-      - ./Secure_Canal/certs/chat_service/server.crt:/etc/ssl/certs/server.crt:ro
-      - ./Secure_Canal/certs/chat_service/server.key:/etc/ssl/private/server.key:ro
+    - ./Secure_Channel/certs/chat_service/server.crt:/etc/ssl/certs/server.crt:ro
+    - ./Secure_Channel/certs/chat_service/server.key:/etc/ssl/private/server.key:ro
 ```
 
 El API Gateway también necesita la CA para verificar los certificados de los servicios:
@@ -58,9 +58,9 @@ El API Gateway también necesita la CA para verificar los certificados de los se
 ```yaml
   api_gateway:
     volumes:
-      - ./Secure_Canal/certs/api_gateway/server.crt:/etc/ssl/certs/server.crt:ro
-      - ./Secure_Canal/certs/api_gateway/server.key:/etc/ssl/private/server.key:ro
-      - ./Secure_Canal/ca/ca.crt:/etc/ssl/certs/ca.crt:ro
+    - ./Secure_Channel/certs/api_gateway/server.crt:/etc/ssl/certs/server.crt:ro
+    - ./Secure_Channel/certs/api_gateway/server.key:/etc/ssl/private/server.key:ro
+    - ./Secure_Channel/ca/ca.crt:/etc/ssl/certs/ca.crt:ro
 ```
 
 ## 🐳 Configuración en Dockerfile
@@ -89,12 +89,12 @@ Los archivos de certificados deben tener permisos de lectura para que los conten
 
 ```bash
 # Certificados públicos (644: rw-r--r--)
-chmod 644 Secure_Canal/certs/*/server.crt
-chmod 644 Secure_Canal/ca/ca.crt
+chmod 644 Secure_Channel/certs/*/server.crt
+chmod 644 Secure_Channel/ca/ca.crt
 
 # Llaves privadas (644 para Docker o 600 para mayor seguridad)
-chmod 644 Secure_Canal/certs/*/server.key
-chmod 600 Secure_Canal/ca/ca.key  # La CA key debe ser más restrictiva
+chmod 644 Secure_Channel/certs/*/server.key
+chmod 600 Secure_Channel/ca/ca.key  # La CA key debe ser más restrictiva
 ```
 
 ## 🔄 Nginx SSL Configuration
@@ -173,6 +173,23 @@ openssl x509 -req -in certs/$SERVICE_NAME/server.csr \
     -extfile certs/$SERVICE_NAME/server.ext.cnf
 ```
 
+## Automatización: script de generación de certificados
+
+He incluido un script simple que automatiza la creación de la CA (si no existe) y la generación/firma
+de certificados para `api_gateway`, `chat_service` y `user_service`.
+
+Archivo: `Secure_Channel/generate_certs.sh`
+
+Uso:
+
+```bash
+cd Secure_Channel
+./generate_certs.sh
+```
+
+El script es idempotente: crea la CA solo si no existe y (re)genera los certificados de los servicios.
+
+
 ## 🐛 Troubleshooting
 
 ### Error: Permission denied al leer certificados
@@ -182,7 +199,7 @@ openssl x509 -req -in certs/$SERVICE_NAME/server.csr \
 **Solución:**
 1. Verificar permisos de archivos en el host:
    ```bash
-   ls -la Secure_Canal/certs/service_name/
+    ls -la Secure_Channel/certs/service_name/
    ```
 
 2. Asegurar que el Dockerfile crea los directorios con permisos correctos:
@@ -193,7 +210,7 @@ openssl x509 -req -in certs/$SERVICE_NAME/server.csr \
 
 3. Dar permisos de lectura a los certificados:
    ```bash
-   chmod 644 Secure_Canal/certs/*/server.{crt,key}
+    chmod 644 Secure_Channel/certs/*/server.{crt,key}
    ```
 
 ### Error: host not found in upstream

@@ -27,7 +27,7 @@ check_error() {
 
 # 1. Verificar estructura de directorios
 echo "📁 Verificando estructura de directorios..."
-if [ -d "Secure_Canal/ca" ] && [ -d "Secure_Canal/certs" ]; then
+if [ -d "Secure_Channel/ca" ] && [ -d "Secure_Channel/certs" ]; then
     check_success "Estructura de directorios correcta"
 else
     check_error "Faltan directorios principales"
@@ -37,15 +37,15 @@ fi
 # 2. Verificar CA
 echo ""
 echo "🔑 Verificando Autoridad Certificadora..."
-if [ -f "Secure_Canal/ca/ca.crt" ] && [ -f "Secure_Canal/ca/ca.key" ]; then
+if [ -f "Secure_Channel/ca/ca.crt" ] && [ -f "Secure_Channel/ca/ca.key" ]; then
     check_success "Archivos de CA presentes"
     
     # Verificar validez del certificado
-    if openssl x509 -in Secure_Canal/ca/ca.crt -noout -checkend 86400 > /dev/null 2>&1; then
+    if openssl x509 -in Secure_Channel/ca/ca.crt -noout -checkend 86400 > /dev/null 2>&1; then
         check_success "Certificado de CA válido"
         
         # Mostrar información del certificado
-        expiry=$(openssl x509 -in Secure_Canal/ca/ca.crt -noout -enddate | cut -d= -f2)
+        expiry=$(openssl x509 -in Secure_Channel/ca/ca.crt -noout -enddate | cut -d= -f2)
         echo "   Expira: $expiry"
     else
         check_error "Certificado de CA expirado o inválido"
@@ -63,14 +63,14 @@ for service in "${services[@]}"; do
     echo ""
     echo "  Servicio: $service"
     
-    cert_path="Secure_Canal/certs/$service/server.crt"
-    key_path="Secure_Canal/certs/$service/server.key"
+    cert_path="Secure_Channel/certs/$service/server.crt"
+    key_path="Secure_Channel/certs/$service/server.key"
     
     if [ -f "$cert_path" ] && [ -f "$key_path" ]; then
         check_success "Archivos presentes"
         
         # Verificar que el certificado fue firmado por nuestra CA
-        if openssl verify -CAfile Secure_Canal/ca/ca.crt "$cert_path" > /dev/null 2>&1; then
+        if openssl verify -CAfile Secure_Channel/ca/ca.crt "$cert_path" > /dev/null 2>&1; then
             check_success "Certificado firmado por CA válida"
         else
             check_error "Certificado no firmado por nuestra CA"
@@ -105,8 +105,8 @@ echo ""
 echo "🔒 Verificando permisos de archivos..."
 
 for service in "${services[@]}"; do
-    cert_path="Secure_Canal/certs/$service/server.crt"
-    key_path="Secure_Canal/certs/$service/server.key"
+    cert_path="Secure_Channel/certs/$service/server.crt"
+    key_path="Secure_Channel/certs/$service/server.key"
     
     if [ -f "$cert_path" ]; then
         perms=$(stat -c "%a" "$cert_path")
@@ -131,9 +131,9 @@ done
 echo ""
 echo "🐳 Verificando configuración de Docker Compose..."
 
-if grep -q "Secure_Canal/certs/chat_service/server.crt" docker-compose.yml && \
-   grep -q "Secure_Canal/certs/user_service/server.crt" docker-compose.yml && \
-   grep -q "Secure_Canal/certs/api_gateway/server.crt" docker-compose.yml; then
+if grep -q "Secure_Channel/certs/chat_service/server.crt" docker-compose.yml && \
+   grep -q "Secure_Channel/certs/user_service/server.crt" docker-compose.yml && \
+   grep -q "Secure_Channel/certs/api_gateway/server.crt" docker-compose.yml; then
     check_success "Volúmenes configurados en docker-compose.yml"
 else
     check_error "Faltan volúmenes en docker-compose.yml"
@@ -182,5 +182,5 @@ echo "Para probar la comunicación SSL:"
 echo "  curl -k https://localhost:8002/health"
 echo ""
 echo "Para ver detalles del certificado:"
-echo "  openssl x509 -in Secure_Canal/certs/chat_service/server.crt -text -noout"
+echo "  openssl x509 -in Secure_Channel/certs/chat_service/server.crt -text -noout"
 echo ""

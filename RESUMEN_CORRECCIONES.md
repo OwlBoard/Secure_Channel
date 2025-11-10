@@ -47,8 +47,8 @@ RUN mkdir -p /etc/ssl/private /etc/ssl/certs && \
 
 **Comandos ejecutados:**
 ```bash
-chmod 644 Secure_Canal/certs/chat_service/server.crt
-chmod 644 Secure_Canal/certs/chat_service/server.key
+chmod 644 Secure_Channel/certs/chat_service/server.crt
+chmod 644 Secure_Channel/certs/chat_service/server.key
 ```
 
 **Permisos finales:**
@@ -77,13 +77,13 @@ CMD python -c "import requests; requests.get('https://localhost:8443/health', ve
    - Añadida creación de directorios SSL
    - Añadidos permisos 755
 
-3. **Secure_Canal/certs/*/server.{crt,key}**
+3. **Secure_Channel/certs/*/server.{crt,key}**
    - Ajustados permisos a 644
 
 ## 🧪 Verificación
 
 ### Script de Verificación Creado
-Archivo: `Secure_Canal/verify.sh`
+Archivo: `Secure_Channel/verify.sh`
 
 Verifica:
 - ✅ Estructura de directorios
@@ -140,13 +140,13 @@ Verifica:
 
 ## 📚 Documentación Creada
 
-1. **Secure_Canal/README.md**
+1. **Secure_Channel/README.md**
    - Guía completa del Secure Canal
    - Instrucciones de configuración
    - Troubleshooting
    - Buenas prácticas de seguridad
 
-2. **Secure_Canal/verify.sh**
+2. **Secure_Channel/verify.sh**
    - Script automático de verificación
    - Validación de certificados
    - Verificación de permisos
