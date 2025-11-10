@@ -1,0 +1,19 @@
+[ req ]
+default_bits        = 4096
+distinguished_name  = req_distinguished_name
+req_extensions      = v3_req
+prompt              = no
+
+[ req_distinguished_name ]
+countryName                 = CO
+stateOrProvinceName         = Bogota
+localityName                = Bogota
+organizationName            = OwlBoard
+commonName                  = user_service
+
+[ v3_req ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = user_service   # <-- Nombre del servicio en Docker
+DNS.2 = localhost     # <-- Útil para health checks
