@@ -9,12 +9,12 @@ countryName                 = CO
 stateOrProvinceName         = Bogota
 localityName                = Bogota
 organizationName            = OwlBoard
-commonName                  = chat_service # <-- ¡IMPORTANTE!
+commonName                  = auth_service
 
 [ v3_req ]
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = chat_service   
-DNS.2 = localhost     
+DNS.1 = auth_service
+DNS.2 = localhost
 IP.1 = 127.0.0.1
