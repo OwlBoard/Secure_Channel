@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CA_DIR="$ROOT_DIR/ca"
 CERTS_DIR="$ROOT_DIR/certs"
-SERVICES=(api_gateway chat_service user_service)
+SERVICES=(api_gateway chat_service user_service load_balancer)
 
 echo "== Generating/refreshing certificates in $ROOT_DIR =="
 
