@@ -1,20 +1,9 @@
 [ req ]
-default_bits        = 4096
-distinguished_name  = req_distinguished_name
-req_extensions      = v3_req
-prompt              = no
-
-[ req_distinguished_name ]
-countryName                 = CO
-stateOrProvinceName         = Bogota
-localityName                = Bogota
-organizationName            = OwlBoard
-commonName                  = chat_service # <-- ¡IMPORTANTE!
+distinguished_name = req_distinguished_name
 
 [ v3_req ]
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = chat_service   
-DNS.2 = localhost     
-IP.1 = 127.0.0.1
+DNS.1 = chat_service
+DNS.2 = chat_service.local

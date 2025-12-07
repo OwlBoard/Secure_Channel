@@ -1,0 +1,20 @@
+[ req ]
+default_bits        = 4096
+distinguished_name  = req_distinguished_name
+req_extensions      = v3_req
+prompt              = no
+
+[ req_distinguished_name ]
+countryName                 = CO
+stateOrProvinceName         = Bogota
+localityName                = Bogota
+organizationName            = OwlBoard
+commonName                  = load_balancer
+
+[ v3_req ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = load_balancer
+DNS.2 = localhost
+IP.1 = 127.0.0.1

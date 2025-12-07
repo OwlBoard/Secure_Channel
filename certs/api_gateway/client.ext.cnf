@@ -1,8 +1,6 @@
-basicConstraints = CA:FALSE
-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-extendedKeyUsage = clientAuth
+[ v3_req ]
 subjectAltName = @alt_names
 
-[alt_names]
+[ alt_names ]
 DNS.1 = api_gateway
-DNS.2 = localhost
+DNS.2 = api_gateway.local
